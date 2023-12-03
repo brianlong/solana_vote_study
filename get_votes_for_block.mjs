@@ -10,6 +10,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 // import fs from 'fs';
 import * as csvWriter from 'csv-writer';
+import { createHash } from 'node:crypto'
+function sha256(content) {  
+  return createHash('sha256').update(content).digest('hex')
+}
 
 // Read the slot number from the command line
 const slot = process.argv[2];
@@ -51,6 +55,7 @@ block.result.transactions.forEach((tx) => {
   // console.log(`${JSON.stringify(tx)}\n`);
   // console.log(`${JSON.stringify(tx.transaction.message.instructions[0].parsed)}\n`);
   const lockout_length = tx.transaction.message.instructions[0].parsed.info.voteStateUpdate.lockouts.length;
+  const lockouts_hash = sha256(JSON.stringify(tx.transaction.message.instructions[0].parsed.info.voteStateUpdate.lockouts));
   const vote_slot = tx.transaction.message.instructions[0].parsed.info.voteStateUpdate.lockouts[lockout_length-1].slot;
   const vote_state_hash = tx.transaction.message.instructions[0].parsed.info.voteStateUpdate.hash;
   if(!account_state_votes[vote_state_hash]) {
@@ -63,6 +68,7 @@ block.result.transactions.forEach((tx) => {
     tx.transaction.message.instructions[0].parsed.info.voteStateUpdate.root,
     vote_slot,
     vote_slot - slot_number,
+    lockouts_hash,
     vote_state_hash,
     tx.transaction.message.instructions[0].parsed.info.voteAuthority,
     tx.transaction.signatures[0]
@@ -82,6 +88,7 @@ const csvFileWriter = createCsvWriter({
     {id: 'vote_root', title: 'Vote Root'},
     {id: 'vote_slot', title: 'Vote Slot'},
     {id: 'vote_latency', title: 'Vote Latency'},
+    {id: 'lockouts_hash', title: 'Vote Latency'},
     {id: 'vote_state_hash', title: 'Vote State Hash'},
     {id: 'vote_authority', title: 'Vote Authority'},
     {id: 'signature', title: 'Signature'}
