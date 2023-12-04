@@ -1,6 +1,9 @@
 # solana_vote_study
 A collection of scripts &amp; utilities to study Solana validator vote history.
 
+Raw data downloads:
+Slots 233375500-233376500: https://blocklogicllc.box.com/s/dm7gfichuihotu3nsk4fnx0xxxg0v6mw
+
 ## Install Notes
 Try `yarn install`. If that doesn't work, see package.json and add the libraries you see there.
 
