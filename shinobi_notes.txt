@@ -1,0 +1,11 @@
+This is the following fields in order:
+validator identity pubkey
+number of successful vote tx
+number of failed vote tx
+number of slots from the range of interest that were voted on
+% of voted on slots that were voted on before consensus
+average vote latency (by voted-on slot)
+average vote latency (by vote tx)
+
+I have sorted the list by number of successful vote tx since that's the value you originally asked about (I think).
+One bit of good news is that the total vote tx I have for Certus and Fire are the same as what you have, so the data checks out at least at that level.
